@@ -1,0 +1,29 @@
+.page { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+.header { text-align: center; margin-bottom: 40px; }
+.header h1 { color: var(--primary); font-size: 2rem; margin-bottom: 12px; }
+.header p { color: var(--text-muted); font-size: 1.1rem; }
+.container { display: flex; flex-direction: column; gap: 24px; }
+.step {}
+.scheduleNote { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px; }
+.datePicker { width: 100%; padding: 10px 14px; font-size: 1rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); color: var(--text); cursor: pointer; box-sizing: border-box; }
+.datePicker:focus { outline: none; border-color: var(--primary); }
+.dayLabel { margin-top: 10px; font-size: 0.9rem; color: var(--primary); font-weight: 600; }
+.noSlots { color: var(--text-muted); font-size: 0.9rem; margin-top: 8px; }
+.slotGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+.slotBtn { display: flex; flex-direction: column; align-items: center; padding: 14px; border: 2px solid var(--border); border-radius: var(--radius); background: var(--surface); cursor: pointer; transition: all 0.2s; }
+.slotBtn:hover:not(:disabled) { border-color: var(--primary); }
+.slotBtn.selected { border-color: var(--primary); background: var(--primary); color: #fff; }
+.slotBtn.full { opacity: 0.5; cursor: not-allowed; background: #f5f5f5; }
+.slotTime { font-weight: 700; font-size: 0.95rem; }
+.slotAvail { font-size: 0.8rem; margin-top: 4px; color: var(--success); }
+.slotBtn.selected .slotAvail { color: rgba(255,255,255,0.8); }
+.form { display: flex; flex-direction: column; gap: 16px; }
+.summary { background: #f0f7f0; padding: 12px 16px; border-radius: var(--radius); font-size: 0.95rem; display: flex; flex-direction: column; gap: 4px; }
+.errorMsg { background: #fff5f5; color: var(--danger); padding: 12px; border-radius: var(--radius); border: 1px solid #fcc; }
+.confirmCard { max-width: 500px; margin: 80px auto; text-align: center; }
+.confirmIcon { font-size: 4rem; margin-bottom: 20px; }
+.confirmCard h2 { color: var(--primary); margin-bottom: 16px; }
+.confirmCard p { margin-bottom: 12px; color: var(--text-muted); }
+.note { font-size: 0.9rem; background: #fff8e1; padding: 12px; border-radius: var(--radius); margin-bottom: 20px !important; }
+.reviewPrompt { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); text-align: left; }
+.reviewPrompt h3 { font-size: 1rem; color: var(--primary); margin-bottom: 14px; text-align: center; }

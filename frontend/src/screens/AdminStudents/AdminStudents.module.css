@@ -1,0 +1,41 @@
+.page { max-width: 900px; margin: 0 auto; padding: 32px 20px; display: flex; flex-direction: column; gap: 16px; }
+.loading { text-align: center; padding: 80px; color: var(--text-muted); }
+.header h1 { color: var(--primary); font-size: 1.8rem; }
+.header p { color: var(--text-muted); margin-top: 4px; }
+.empty { color: var(--text-muted); text-align: center; padding: 20px; }
+
+.studentCard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.studentRow { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; cursor: pointer; transition: background 0.15s; }
+.studentRow:hover { background: var(--bg); }
+.studentInfo { display: flex; flex-direction: column; gap: 4px; }
+.name { font-weight: 700; font-size: 1rem; color: var(--text); }
+.meta { font-size: 0.82rem; color: var(--text-muted); }
+.rowRight { display: flex; align-items: center; gap: 12px; }
+.totalPaid { font-size: 0.85rem; font-weight: 600; color: var(--success); }
+.toggle { font-size: 0.75rem; color: var(--primary); }
+
+.expanded { border-top: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; gap: 24px; background: var(--bg); }
+.section { display: flex; flex-direction: column; gap: 10px; }
+.sectionTitle { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; }
+
+.payTable { display: flex; flex-direction: column; }
+.payHeader { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; padding: 8px 12px; background: var(--surface); border-radius: var(--radius); font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+.payRow { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 0.88rem; align-items: center; }
+.payRow:last-child { border-bottom: none; }
+.amount { font-weight: 600; color: var(--success); }
+
+.payForm { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.payActions { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; }
+.savedMsg { color: var(--success); font-size: 0.88rem; font-weight: 600; }
+
+.tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 16px; }
+.tab { padding: 8px 20px; background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -2px; cursor: pointer; font-size: 0.88rem; font-weight: 600; color: var(--text-muted); transition: all 0.15s; }
+.tab:hover { color: var(--primary); }
+.tabActive { color: var(--primary) !important; border-bottom-color: var(--primary) !important; }
+
+.progressCard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 16px; margin-bottom: 10px; }
+.progressHeader { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.progressLevel { font-weight: 700; color: var(--primary); font-size: 0.95rem; }
+.progressDate { font-size: 0.8rem; color: var(--text-muted); }
+.progressField { font-size: 0.83rem; color: #555; margin-top: 3px; }
+.progressRemarks { font-size: 0.83rem; color: var(--text-muted); font-style: italic; margin-top: 4px; }

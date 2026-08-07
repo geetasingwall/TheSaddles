@@ -1,0 +1,15 @@
+.page { max-width: 700px; margin: 0 auto; padding: 40px 20px; }
+.header { text-align: center; margin-bottom: 32px; }
+.headerTitle { display: inline-flex; align-items: center; gap: 12px; justify-content: center; margin-bottom: 12px; }
+.headerLogo { width: 100px; height: 100px; object-fit: contain; border-radius: 50%; }
+.header h1 { color: var(--primary); font-size: 2rem; margin-bottom: 12px; }
+.header p { color: var(--text-muted); }
+.formCard {}
+.form { display: flex; flex-direction: column; gap: 16px; }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.errorMsg { background: #fff5f5; color: var(--danger); padding: 12px; border-radius: var(--radius); border: 1px solid #fcc; }
+.successCard { max-width: 500px; margin: 80px auto; text-align: center; }
+.successIcon { font-size: 4rem; margin-bottom: 20px; }
+.successCard h2 { color: var(--primary); margin-bottom: 16px; }
+.successCard p { color: var(--text-muted); margin-bottom: 12px; }
+@media (max-width: 600px) { .row { grid-template-columns: 1fr; } }

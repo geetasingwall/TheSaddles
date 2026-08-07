@@ -1,0 +1,62 @@
+.nav {
+  background: var(--primary);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.brand { color: #fff; font-size: 1.3rem; font-weight: 700; text-decoration: none; margin-right: 32px; }
+.brand:hover { text-decoration: none; }
+.toggle { display: none; background: none; border: none; color: #fff; padding: 4px; }
+.links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.links a { color: rgba(255,255,255,0.9); font-weight: 500; text-decoration: none; transition: color 0.2s; }
+.links a:hover { color: #fff; text-decoration: none; }
+.ctaLink {
+  background: var(--accent) !important;
+  color: #fff !important;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  font-weight: 600 !important;
+}
+.loginLink {
+  background: rgba(255,255,255,0.15) !important;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+}
+.userMenu { display: flex; align-items: center; gap: 12px; }
+.userName { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.9); font-size: 0.9rem; }
+.logoutBtn { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.15); border: none; color: #fff; padding: 6px 12px; border-radius: var(--radius); font-size: 0.85rem; cursor: pointer; }
+.logoutBtn:hover { background: rgba(255,255,255,0.25); }
+.dashboardLink { background: rgba(255,255,255,0.15) !important; padding: 6px 14px; border-radius: var(--radius); font-size: 0.9rem; font-weight: 600 !important; }
+.dashboardLink:hover { background: rgba(255,255,255,0.25) !important; }
+
+@media (max-width: 768px) {
+  .toggle { display: block; }
+  .links {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: var(--primary-dark);
+    flex-direction: column;
+    padding: 20px;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .links.open { display: flex; }
+}

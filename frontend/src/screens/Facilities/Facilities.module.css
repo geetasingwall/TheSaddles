@@ -1,0 +1,74 @@
+.page { min-height: 100vh; background: var(--bg); }
+
+/* Hero */
+.hero { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-light) 100%); padding: 80px 20px 100px; text-align: center; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); }
+.heroContent { position: relative; max-width: 700px; margin: 0 auto; }
+.heroEyebrow { display: inline-block; background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); font-size: 0.8rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 6px 18px; border-radius: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.2); }
+.hero h1 { color: #fff; font-size: 3rem; font-weight: 800; margin-bottom: 16px; line-height: 1.15; }
+.hero p { color: rgba(255,255,255,0.8); font-size: 1.15rem; line-height: 1.7; }
+.heroWave { display: block; margin-top: -2px; }
+
+/* Services Strip */
+.servicesStrip { display: grid; grid-template-columns: repeat(4, 1fr); background: var(--primary-dark); }
+.serviceItem { display: flex; align-items: flex-start; gap: 14px; padding: 28px 20px; border: none; border-right: 1px solid rgba(255,255,255,0.1); background: transparent; cursor: pointer; text-align: left; transition: background 0.2s; position: relative; }
+.serviceItem:last-child { border-right: none; }
+.serviceItem:hover { background: rgba(255,255,255,0.07); }
+.serviceItemActive { background: rgba(255,255,255,0.12) !important; }
+.serviceItemActive::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--accent); }
+.serviceIcon { font-size: 2rem; flex-shrink: 0; margin-top: 2px; }
+.serviceItem h3 { color: #fff; font-size: 0.95rem; font-weight: 700; margin-bottom: 5px; }
+.serviceItem p { color: rgba(255,255,255,0.65); font-size: 0.78rem; line-height: 1.5; }
+.serviceChevron { margin-left: auto; color: rgba(255,255,255,0.5); font-size: 0.7rem; flex-shrink: 0; align-self: center; padding-left: 8px; }
+
+/* Inline Detail Panel */
+.detailPanel { background: #fff; border-bottom: 3px solid var(--accent); animation: expandDown 0.25s ease; overflow: hidden; }
+@keyframes expandDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+.detailInner { max-width: 1200px; margin: 0 auto; padding: 40px 24px 48px; }
+.detailHeader { display: flex; align-items: center; gap: 18px; margin-bottom: 36px; }
+.detailIcon { font-size: 3rem; flex-shrink: 0; }
+.detailHeader h2 { color: var(--primary-dark); font-size: 1.7rem; font-weight: 800; margin-bottom: 6px; }
+.detailHeader p { color: var(--text-muted); font-size: 0.97rem; }
+.detailGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.detailCard { background: var(--bg); border-radius: 12px; padding: 24px 20px; border-left: 4px solid var(--primary); }
+.detailCardIcon { font-size: 1.8rem; display: block; margin-bottom: 12px; }
+.detailCardLogo { width: 1.8rem; height: 1.8rem; object-fit: contain; display: block; margin-bottom: 12px; }
+.detailCard h4 { color: var(--primary-dark); font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; }
+.detailCard p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.65; }
+.leaseNote { display: flex; align-items: center; gap: 10px; margin-top: 28px; background: #f0f7f0; border: 1px solid rgba(44,95,46,0.15); border-left: 4px solid var(--primary); border-radius: 10px; padding: 14px 22px; font-size: 0.92rem; color: var(--text); }
+.leaseNoteLogo { width: 28px; height: 28px; object-fit: contain; border-radius: 50%; flex-shrink: 0; }
+.leaseNote a { color: var(--primary); font-weight: 700; }
+.leaseNote a:hover { text-decoration: underline; }
+
+/* Equipment Section */
+.equipSection { background: linear-gradient(180deg, var(--bg) 0%, #e8f5e9 100%); padding: 70px 20px 80px; }
+.equipInner { max-width: 1200px; margin: 0 auto; }
+.equipHeader { text-align: center; margin-bottom: 48px; }
+.equipEyebrow { display: inline-block; background: var(--accent); color: #fff; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 5px 16px; border-radius: 20px; margin-bottom: 14px; }
+.equipHeader h2 { color: var(--primary-dark); font-size: 2rem; font-weight: 800; margin-bottom: 10px; }
+.equipHeader p { color: var(--text-muted); font-size: 1rem; max-width: 520px; margin: 0 auto; line-height: 1.7; }
+.equipGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+.equipCard { background: var(--surface); border-radius: 14px; padding: 28px 22px 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); border: 1px solid rgba(44,95,46,0.08); transition: transform 0.2s, box-shadow 0.2s; text-align: center; }
+.equipCard:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(44,95,46,0.14); }
+.equipIcon { font-size: 2.8rem; margin-bottom: 14px; display: block; }
+.equipLogo { width: 2.8rem; height: 2.8rem; object-fit: contain; display: block; margin: 0 auto 14px; }
+.equipCard h3 { color: var(--primary); font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+.equipCard p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; }
+.equipNote { margin-top: 32px; text-align: center; background: var(--surface); border: 1px solid rgba(44,95,46,0.15); border-left: 4px solid var(--accent); border-radius: 10px; padding: 16px 24px; font-size: 0.92rem; color: var(--text); line-height: 1.6; }
+.equipNote a { color: var(--primary); font-weight: 700; }
+.equipNote a:hover { text-decoration: underline; }
+
+.loading { text-align: center; padding: 120px 20px; color: var(--text-muted); font-size: 1.1rem; }
+
+@media (max-width: 900px) {
+  .detailGrid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2rem; }
+  .servicesStrip { grid-template-columns: repeat(2, 1fr); }
+  .serviceItem { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+  .serviceItem:nth-child(odd) { border-right: 1px solid rgba(255,255,255,0.1); }
+  .detailGrid { grid-template-columns: 1fr; }
+  .equipGrid { grid-template-columns: repeat(2, 1fr); }
+  .equipHeader h2 { font-size: 1.6rem; }
+}

@@ -1,0 +1,31 @@
+.page { max-width: 900px; margin: 0 auto; padding: 32px 20px; display: flex; flex-direction: column; gap: 16px; }
+.loading { text-align: center; padding: 60px; color: var(--text-muted); }
+.empty { text-align: center; color: var(--text-muted); padding: 40px; }
+.header { margin-bottom: 4px; }
+.header h1 { color: var(--primary); font-size: 1.8rem; }
+
+.filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.filterBtn { padding: 6px 16px; border: 1px solid var(--border); border-radius: 20px; background: var(--surface); cursor: pointer; font-size: 0.85rem; color: var(--text-muted); transition: all 0.15s; }
+.filterBtn:hover { border-color: var(--primary); color: var(--primary); }
+.filterBtn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+.row { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; cursor: pointer; transition: background 0.15s; }
+.row:hover { background: var(--bg); }
+.info { display: flex; flex-direction: column; gap: 4px; }
+.name { font-weight: 700; font-size: 1rem; }
+.meta { font-size: 0.82rem; color: var(--text-muted); }
+.right { display: flex; align-items: center; gap: 12px; }
+.status { font-size: 0.82rem; font-weight: 600; }
+.toggle { font-size: 0.75rem; color: var(--primary); }
+
+.expanded { border-top: 1px solid var(--border); padding: 16px 20px; background: var(--bg); display: flex; flex-direction: column; gap: 14px; }
+.detailGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.detailGrid div { display: flex; flex-direction: column; gap: 2px; }
+.label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; letter-spacing: 0.04em; }
+.actions { display: flex; gap: 8px; }
+
+.modalOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+.modal { background: var(--surface); border-radius: var(--radius); padding: 28px; width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.18); }
+.modal h3 { color: var(--primary); font-size: 1.1rem; }
+.modalActions { display: flex; gap: 10px; }

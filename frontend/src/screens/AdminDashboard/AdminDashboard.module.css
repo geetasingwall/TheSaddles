@@ -1,0 +1,81 @@
+.page { max-width: 1200px; margin: 0 auto; padding: 32px 20px; display: flex; flex-direction: column; gap: 32px; }
+.loading { text-align: center; padding: 80px; color: var(--text-muted); }
+.header h1 { color: var(--primary); font-size: 1.8rem; }
+.header p { color: var(--text-muted); margin-top: 4px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; }
+.table { display: flex; flex-direction: column; }
+.actions { display: flex; gap: 8px; }
+.empty { color: var(--text-muted); text-align: center; padding: 24px; }
+
+/* 5-column table (registrations) */
+.tableHeader5 { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 1.5fr; gap: 12px; padding: 10px 16px; background: var(--bg); border-radius: var(--radius); font-weight: 700; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; }
+.tableRow5 { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 1.5fr; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); align-items: center; }
+
+/* 4-column table (coaches) */
+.tableHeader4 { display: grid; grid-template-columns: 1.5fr 1.2fr 0.8fr 1.2fr; gap: 8px; padding: 10px 16px; background: var(--bg); border-radius: var(--radius); font-weight: 700; font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase; }
+.tableRow4 { display: grid; grid-template-columns: 1.5fr 1.2fr 0.8fr 1.2fr; gap: 8px; padding: 10px 16px; border-bottom: 1px solid var(--border); align-items: center; font-size: 0.88rem; }
+
+/* 8-column table (bookings) */
+.tableHeader8 { display: grid; grid-template-columns: 1.5fr 1.5fr 1.2fr 1fr 1.2fr 0.5fr 0.8fr 0.8fr; gap: 8px; padding: 10px 16px; background: var(--bg); border-radius: var(--radius); font-weight: 700; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; }
+.tableRow8 { display: grid; grid-template-columns: 1.5fr 1.5fr 1.2fr 1fr 1.2fr 0.5fr 0.8fr 0.8fr; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border); align-items: center; font-size: 0.9rem; }
+
+.tableRow5:last-child, .tableRow4:last-child, .tableRow8:last-child, .tableRow6:last-child { border-bottom: none; }
+.tableHeader6 { display: grid; grid-template-columns: 2fr 1.2fr 1fr 1fr 1fr 1.2fr; gap: 12px; padding: 10px 16px; background: var(--bg); border-radius: var(--radius); font-weight: 700; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; }
+.tableRow6 { display: grid; grid-template-columns: 2fr 1.2fr 1fr 1fr 1fr 1.2fr; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); align-items: center; }
+.tableHeader7 { display: grid; grid-template-columns: 2fr 1.2fr 1.5fr 0.8fr 0.8fr 0.8fr 1.2fr 0.5fr; gap: 10px; padding: 10px 16px; background: var(--bg); border-radius: var(--radius); font-weight: 700; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; }
+.tableRow7 { display: grid; grid-template-columns: 2fr 1.2fr 1.5fr 0.8fr 0.8fr 0.8fr 1.2fr 0.5fr; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--border); align-items: center; }
+
+/* Inline form */
+.inlineForm { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-top: 16px; padding: 16px; background: var(--bg); border-radius: var(--radius); }
+
+/* Batch form — single row */
+.batchForm { display: flex; flex-wrap: nowrap; align-items: flex-end; gap: 8px; margin-top: 16px; padding: 12px 16px; background: var(--bg); border-radius: var(--radius); overflow-x: auto; }
+.batchForm > * { flex-shrink: 0; }
+.batchFormName { width: 140px; }
+.batchFormCoach { width: 130px; }
+.batchFormTime { width: 110px; }
+.batchFormDays { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.batchFormActions { display: flex; gap: 6px; flex-shrink: 0; }
+
+/* Modal */
+.modalOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 200; }
+.modal { background: var(--surface); border-radius: var(--radius); padding: 32px; width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+.modal h3 { color: var(--primary); font-size: 1.2rem; margin: 0; }
+.modalName { color: var(--text-muted); font-size: 0.95rem; margin: 0; }
+.modalActions { display: flex; gap: 12px; margin-top: 8px; }
+
+/* Day checkboxes */
+.daysGrid { grid-column: 1/-1; }
+.daysLabel { display: block; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; }
+.dayCheckboxes { display: flex; flex-wrap: wrap; gap: 8px; }
+.dayCheck { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.15s; }
+.dayCheck:has(input:checked) { background: var(--primary); color: #fff; border-color: var(--primary); }
+.dayCheck input { display: none; }
+
+/* Batch blocks */
+.batchBlock { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
+.batchHeader { display: flex; flex-wrap: nowrap; align-items: center; gap: 8px; padding: 10px 14px; background: var(--bg); font-size: 0.85rem; }
+.batchHeader strong { min-width: 80px; flex: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.batchHeader span { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-muted); font-size: 0.82rem; }
+.batchHeader button { flex-shrink: 0; white-space: nowrap; }
+.batchStudents { padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.studentChip { background: var(--primary); color: #fff; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; display: flex; align-items: center; gap: 6px; }
+.chipRemove { background: none; border: none; color: rgba(255,255,255,0.8); cursor: pointer; font-size: 0.9rem; padding: 0; line-height: 1; }
+.chipRemove:hover { color: #fff; }
+.noStudents { color: var(--text-muted); font-size: 0.85rem; }
+.assignSelect { padding: 4px 8px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.85rem; cursor: pointer; background: var(--surface); }
+.quickLinks h3 { color: var(--primary); margin-bottom: 16px; }
+.horseInlineRow { display: flex; gap: 8px; align-items: center; }
+.horseSelect { flex: 1; padding: 8px 10px; border: 1.5px solid var(--border); border-radius: var(--radius); font-size: 0.88rem; background: var(--surface); color: var(--text); }
+.horseCheckLabel { display: flex; align-items: center; gap: 6px; font-size: 0.88rem; cursor: pointer; }
+.fullCol { grid-column: 1 / -1; }
+.linkGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.quickLink { display: block; padding: 16px; background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); text-decoration: none; color: var(--text); font-weight: 600; transition: all 0.2s; text-align: center; }
+.quickLink:hover { background: var(--primary); color: #fff; transform: translateY(-2px); text-decoration: none; }
+
+@media (max-width: 768px) {
+  .tableHeader5, .tableRow5, .tableHeader4, .tableRow4 { grid-template-columns: 1fr 1fr; }
+  .tableHeader8, .tableRow8 { grid-template-columns: 1fr 1fr 1fr; }
+  .tableHeader5 span:nth-child(n+3), .tableRow5 span:nth-child(n+3),
+  .tableHeader8 span:nth-child(n+4), .tableRow8 span:nth-child(n+4) { display: none; }
+}
