@@ -17,6 +17,7 @@ import { AdminConfiguration } from './screens/AdminConfiguration/AdminConfigurat
 import { Horses } from './screens/Horses/Horses';
 import { Facilities } from './screens/Facilities/Facilities';
 import { Contact } from './screens/Contact/Contact';
+import { Gallery } from './screens/Gallery/Gallery';
 import type { ReactNode } from 'react';
 
 function ProtectedRoute({ children, requiredType }: { children: ReactNode; requiredType: string }) {
@@ -37,6 +38,7 @@ function AppRoutes() {
         <Route path="/registration" element={<Registration />} />
         <Route path="/horses" element={<Horses />} />
         <Route path="/facilities" element={<Facilities />} />
+        <Route path="/gallery" element={<Gallery />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/student" element={<ProtectedRoute requiredType="STUDENT"><StudentDashboard /></ProtectedRoute>} />
         <Route path="/coach" element={<ProtectedRoute requiredType="COACH"><CoachDashboard /></ProtectedRoute>} />

@@ -309,6 +309,37 @@ class Student(Base):
     attendance_records = orm_relationship("Attendance", back_populates="student")
     progress_records = orm_relationship("StudentProgress", back_populates="student")
     fee_payments = orm_relationship("FeePayment", back_populates="student")
+    video_links = orm_relationship("StudentVideoLink", back_populates="student", order_by="StudentVideoLink.display_order")
+    photos = orm_relationship("StudentPhoto", back_populates="student", order_by="StudentPhoto.created_at.desc()")
+
+
+class StudentPhoto(Base):
+    __tablename__ = "student_photos"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    student_id = Column(UUID(as_uuid=True), ForeignKey("students.id"), nullable=False)
+    image_path = Column(String(500), nullable=False)
+    caption = Column(String(300))
+    is_active = Column(Boolean, nullable=False, default=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, default=datetime.utcnow)
+    updated_at = Column(DateTime(timezone=True))
+
+    student = orm_relationship("Student", back_populates="photos")
+
+
+class StudentVideoLink(Base):
+    __tablename__ = "student_video_links"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    student_id = Column(UUID(as_uuid=True), ForeignKey("students.id"), nullable=False)
+    title = Column(String(300), nullable=False)
+    url = Column(String(1000), nullable=False)
+    display_order = Column(Integer, nullable=False, default=1)
+    is_active = Column(Boolean, nullable=False, default=True)
+    created_at = Column(DateTime(timezone=True), nullable=False, default=datetime.utcnow)
+    updated_at = Column(DateTime(timezone=True))
+
+    student = orm_relationship("Student", back_populates="video_links")
 
 
 class FeePayment(Base):

@@ -14,7 +14,7 @@ from app.schemas.schemas import (
     HorseCreate, HorseUpdate, FacilityCreate, FacilityUpdate,
     TeamMemberCreate, TeamMemberUpdate, TestimonialCreate, TestimonialUpdate,
     LocationCreate, LocationUpdate, ConfigurationUpdate, BatchCreate, BatchUpdate,
-    StudentStatusUpdate, AttendanceUpdate,
+    StudentStatusUpdate, AttendanceUpdate, VideoLinkCreate,
 )
 from app.services.services import (
     AuthService, ConfigurationService, TrialBookingService,
@@ -239,6 +239,12 @@ def student_progress(student_id: UUID = Query(...), db: Session = Depends(get_db
         return error_response(str(e), 404)
 
 
+@student_router.get("/videos")
+def student_videos(student_id: UUID = Query(...), db: Session = Depends(get_db)):
+    from app.repositories.repositories import VideoLinkRepository
+    links = VideoLinkRepository(db).get_by_student(student_id)
+    return success_response(data=[{"id": str(l.id), "title": l.title, "url": l.url, "display_order": l.display_order} for l in links])
+
 # ─── Coach ─────────────────────────────────────────────────────────────────
 
 coach_router = APIRouter(prefix="/api/v1/coach", tags=["Coach"])
@@ -462,6 +468,73 @@ def admin_students(db: Session = Depends(get_db)):
             "place": place,
         })
     return success_response(data=result)
+
+
+@admin_router.get("/students/{student_id}/photos")
+def admin_get_student_photos(student_id: UUID, db: Session = Depends(get_db)):
+    from app.repositories.repositories import StudentPhotoRepository
+    photos = StudentPhotoRepository(db).get_by_student(student_id)
+    return success_response(data=[{"id": str(p.id), "image_path": p.image_path, "caption": p.caption} for p in photos])
+
+
+@admin_router.post("/students/{student_id}/photos")
+def admin_upload_student_photo(student_id: UUID, caption: Optional[str] = None, file: UploadFile = File(...), db: Session = Depends(get_db)):
+    from app.core.settings import get_settings
+    from app.repositories.repositories import StudentPhotoRepository, StudentRepository
+    if not StudentRepository(db).get_by_id(student_id):
+        return error_response("Student not found", 404)
+    settings = get_settings()
+    allowed = {".jpg", ".jpeg", ".png", ".webp"}
+    ext = os.path.splitext(file.filename or "")[1].lower()
+    if ext not in allowed:
+        return error_response("Invalid file type. Use jpg, jpeg, png, or webp.")
+    folder = os.path.join(settings.UPLOAD_PATH, "student_photos", str(student_id))
+    os.makedirs(folder, exist_ok=True)
+    filename = f"{datetime.utcnow().strftime('%Y%m%d%H%M%S%f')}{ext}"
+    dest = os.path.join(folder, filename)
+    with open(dest, "wb") as f_out:
+        shutil.copyfileobj(file.file, f_out)
+    rel_path = f"student_photos/{student_id}/{filename}"
+    photo = StudentPhotoRepository(db).create({"student_id": student_id, "image_path": rel_path, "caption": caption})
+    return success_response(data={"id": str(photo.id), "image_path": rel_path}, message="Photo uploaded", status_code=201)
+
+
+@admin_router.delete("/students/{student_id}/photos/{photo_id}")
+def admin_delete_student_photo(student_id: UUID, photo_id: UUID, db: Session = Depends(get_db)):
+    from app.repositories.repositories import StudentPhotoRepository
+    repo = StudentPhotoRepository(db)
+    photo = repo.get_by_id(photo_id)
+    if not photo or str(photo.student_id) != str(student_id):
+        return error_response("Photo not found", 404)
+    repo.delete(photo)
+    return success_response(message="Photo deleted")
+
+
+@admin_router.get("/students/{student_id}/videos")
+def admin_get_student_videos(student_id: UUID, db: Session = Depends(get_db)):
+    from app.repositories.repositories import VideoLinkRepository
+    links = VideoLinkRepository(db).get_by_student(student_id)
+    return success_response(data=[{"id": str(l.id), "title": l.title, "url": l.url, "display_order": l.display_order} for l in links])
+
+
+@admin_router.post("/students/{student_id}/videos")
+def admin_add_student_video(student_id: UUID, payload: VideoLinkCreate, db: Session = Depends(get_db)):
+    from app.repositories.repositories import VideoLinkRepository, StudentRepository
+    if not StudentRepository(db).get_by_id(student_id):
+        return error_response("Student not found", 404)
+    link = VideoLinkRepository(db).create({"student_id": student_id, "title": payload.title, "url": payload.url, "display_order": payload.display_order})
+    return success_response(data={"id": str(link.id)}, message="Video link added", status_code=201)
+
+
+@admin_router.delete("/students/{student_id}/videos/{link_id}")
+def admin_delete_student_video(student_id: UUID, link_id: UUID, db: Session = Depends(get_db)):
+    from app.repositories.repositories import VideoLinkRepository
+    repo = VideoLinkRepository(db)
+    link = repo.get_by_id(link_id)
+    if not link or str(link.student_id) != str(student_id):
+        return error_response("Video link not found", 404)
+    repo.delete(link)
+    return success_response(message="Video link removed")
 
 
 @admin_router.get("/students/{student_id}/progress")
@@ -1045,3 +1118,22 @@ def get_facility(facility_id: UUID, db: Session = Depends(get_db)):
         return success_response(data={"id": str(f.id), "name": f.facility_name, "short_description": f.short_description, "detailed_description": f.detailed_description, "image_path": f.image_path})
     except ValueError as e:
         return error_response(str(e), 404)
+
+
+# ─── Public Gallery ──────────────────────────────────────────────────────────────
+
+gallery_router = APIRouter(prefix="/api/v1/gallery", tags=["Gallery"])
+
+
+@gallery_router.get("")
+def public_gallery(db: Session = Depends(get_db)):
+    from app.repositories.repositories import StudentPhotoRepository, StudentRepository
+    photos = StudentPhotoRepository(db).get_all_active()
+    result = []
+    for p in photos:
+        student = StudentRepository(db).get_by_id(p.student_id)
+        name = ""
+        if student and student.registration:
+            name = student.registration.first_name
+        result.append({"id": str(p.id), "image_path": p.image_path, "caption": p.caption, "student_name": name})
+    return success_response(data=result)

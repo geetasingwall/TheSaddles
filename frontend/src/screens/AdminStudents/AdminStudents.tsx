@@ -21,6 +21,8 @@ interface Student {
 
 interface Payment { id: string; date: string; amount: number; mode: string; month: string; }
 interface ProgressRecord { id: string; assessment_date: string; riding_level: string; performance_rating?: number; skills_learned?: string; strengths?: string; areas_for_improvement?: string; next_goals?: string; coach_remarks?: string; }
+interface VideoLink { id: string; title: string; url: string; display_order: number; }
+interface StudentPhoto { id: string; image_path: string; caption?: string; }
 
 const PAYMENT_MODES = ['Cash', 'UPI', 'Card', 'Bank Transfer', 'Cheque', 'Other'];
 
@@ -28,9 +30,15 @@ export function AdminStudents() {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<Record<string, 'fees' | 'progress'>>({});
+  const [activeTab, setActiveTab] = useState<Record<string, 'fees' | 'progress' | 'videos' | 'photos'>>({});
   const [fees, setFees] = useState<Record<string, Payment[]>>({});
   const [progress, setProgress] = useState<Record<string, ProgressRecord[]>>({});
+  const [videos, setVideos] = useState<Record<string, VideoLink[]>>({});
+  const [videoForm, setVideoForm] = useState<Record<string, { title: string; url: string }>>({});
+  const [savingVideo, setSavingVideo] = useState<string | null>(null);
+  const [photos, setPhotos] = useState<Record<string, StudentPhoto[]>>({});
+  const [photoCaption, setPhotoCaption] = useState<Record<string, string>>({});
+  const [uploadingPhoto, setUploadingPhoto] = useState<string | null>(null);
   const [feeForm, setFeeForm] = useState<Record<string, { amount: string; mode: string; month: string; date: string }>>({});
   const [saving, setSaving] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
@@ -58,6 +66,33 @@ export function AdminStudents() {
     setProgress(prev => ({ ...prev, [studentId]: (r.data as ProgressRecord[]) || [] }));
   };
 
+  const loadVideos = async (studentId: string) => {
+    const r = await adminApi.getStudentVideos(studentId);
+    setVideos(prev => ({ ...prev, [studentId]: (r.data as VideoLink[]) || [] }));
+    if (!videoForm[studentId]) setVideoForm(prev => ({ ...prev, [studentId]: { title: '', url: '' } }));
+  };
+
+  const loadPhotos = async (studentId: string) => {
+    const r = await adminApi.getStudentPhotos(studentId);
+    setPhotos(prev => ({ ...prev, [studentId]: (r.data as StudentPhoto[]) || [] }));
+  };
+
+  const handleUploadPhoto = async (studentId: string, file: File) => {
+    setUploadingPhoto(studentId);
+    try {
+      await adminApi.uploadStudentPhoto(studentId, file, photoCaption[studentId] || undefined);
+      setPhotoCaption(prev => ({ ...prev, [studentId]: '' }));
+      await loadPhotos(studentId);
+    } finally {
+      setUploadingPhoto(null);
+    }
+  };
+
+  const handleDeletePhoto = async (studentId: string, photoId: string) => {
+    await adminApi.deleteStudentPhoto(studentId, photoId);
+    setPhotos(prev => ({ ...prev, [studentId]: (prev[studentId] || []).filter(p => p.id !== photoId) }));
+  };
+
   const toggleExpand = async (id: string, currentFee?: number) => {
     if (expandedId === id) { setExpandedId(null); return; }
     setExpandedId(id);
@@ -70,6 +105,26 @@ export function AdminStudents() {
       setFeeForm(prev => ({ ...prev, [id]: { amount: '', mode: 'Cash', month: thisMonth, date: today } }));
     }
     if (!feeInput[id]) setFeeInput(prev => ({ ...prev, [id]: currentFee ? String(currentFee) : '' }));
+  };
+
+  const handleAddVideo = async (studentId: string) => {
+    const f = videoForm[studentId];
+    if (!f?.title.trim() || !f?.url.trim()) return;
+    setSavingVideo(studentId);
+    try {
+      await adminApi.addStudentVideo(studentId, { title: f.title, url: f.url });
+      setVideoForm(prev => ({ ...prev, [studentId]: { title: '', url: '' } }));
+      setVideos(prev => { const n = { ...prev }; delete n[studentId]; return n; });
+      await loadVideos(studentId);
+    } finally {
+      setSavingVideo(null);
+    }
+  };
+
+  const handleDeleteVideo = async (studentId: string, linkId: string) => {
+    await adminApi.deleteStudentVideo(studentId, linkId);
+    setVideos(prev => { const n = { ...prev }; delete n[studentId]; return n; });
+    await loadVideos(studentId);
   };
 
   const handleSetMonthlyFee = async (studentId: string) => {
@@ -106,10 +161,12 @@ export function AdminStudents() {
     }
   };
 
-  const switchTab = async (studentId: string, tab: 'fees' | 'progress') => {
+  const switchTab = async (studentId: string, tab: 'fees' | 'progress' | 'videos' | 'photos') => {
     setActiveTab(prev => ({ ...prev, [studentId]: tab }));
     if (tab === 'fees') await loadFees(studentId);
-    else await loadProgress(studentId);
+    else if (tab === 'progress') await loadProgress(studentId);
+    else if (tab === 'videos') await loadVideos(studentId);
+    else await loadPhotos(studentId);
   };
 
   if (loading) return <div className={styles.loading}>Loading students...</div>;
@@ -154,6 +211,8 @@ export function AdminStudents() {
                   <div className={styles.tabs}>
                     <button className={`${styles.tab} ${(activeTab[s.id] || 'fees') === 'fees' ? styles.tabActive : ''}`} onClick={() => switchTab(s.id, 'fees')}>💰 Fees</button>
                     <button className={`${styles.tab} ${activeTab[s.id] === 'progress' ? styles.tabActive : ''}`} onClick={() => switchTab(s.id, 'progress')}>📈 Progress</button>
+                    <button className={`${styles.tab} ${activeTab[s.id] === 'videos' ? styles.tabActive : ''}`} onClick={() => switchTab(s.id, 'videos')}>🎬 Videos</button>
+                    <button className={`${styles.tab} ${activeTab[s.id] === 'photos' ? styles.tabActive : ''}`} onClick={() => switchTab(s.id, 'photos')}>📸 Photos</button>
                   </div>
 
                   {(activeTab[s.id] || 'fees') === 'fees' && (<>
@@ -253,6 +312,82 @@ export function AdminStudents() {
                             {p.coach_remarks && <div className={styles.progressRemarks}>💬 {p.coach_remarks}</div>}
                           </div>
                         ))
+                      )}
+                    </div>
+                  )}
+
+                  {activeTab[s.id] === 'videos' && (
+                    <div className={styles.section}>
+                      <strong className={styles.sectionTitle}>YouTube Video Links</strong>
+                      <div className={styles.videoForm}>
+                        <Input
+                          label="Title"
+                          placeholder="e.g. Trot Technique"
+                          value={videoForm[s.id]?.title || ''}
+                          onChange={e => setVideoForm(prev => ({ ...prev, [s.id]: { ...prev[s.id], title: e.target.value } }))}
+                        />
+                        <Input
+                          label="YouTube URL"
+                          placeholder="https://youtube.com/watch?v=..."
+                          value={videoForm[s.id]?.url || ''}
+                          onChange={e => setVideoForm(prev => ({ ...prev, [s.id]: { ...prev[s.id], url: e.target.value } }))}
+                        />
+                        <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                          <Button size="sm" loading={savingVideo === s.id} onClick={() => handleAddVideo(s.id)}>Add Video</Button>
+                        </div>
+                      </div>
+                      {(videos[s.id] || []).length === 0 ? (
+                        <p className={styles.empty}>No videos added yet.</p>
+                      ) : (
+                        <div className={styles.videoList}>
+                          {(videos[s.id] || []).map(v => (
+                            <div key={v.id} className={styles.videoRow}>
+                              <a href={v.url} target="_blank" rel="noopener noreferrer" className={styles.videoLink}>
+                                <span>▶</span> {v.title}
+                              </a>
+                              <button className={styles.deleteBtn} onClick={() => handleDeleteVideo(s.id, v.id)}>✕</button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {activeTab[s.id] === 'photos' && (
+                    <div className={styles.section}>
+                      <strong className={styles.sectionTitle}>Riding Photos</strong>
+                      <div className={styles.photoUploadRow}>
+                        <Input
+                          label="Caption (optional)"
+                          placeholder="e.g. Jumping practice"
+                          value={photoCaption[s.id] || ''}
+                          onChange={e => setPhotoCaption(prev => ({ ...prev, [s.id]: e.target.value }))}
+                        />
+                        <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                          <label className={styles.uploadLabel}>
+                            {uploadingPhoto === s.id ? 'Uploading...' : '⬆ Upload Photo'}
+                            <input
+                              type="file"
+                              accept="image/*"
+                              style={{ display: 'none' }}
+                              disabled={uploadingPhoto === s.id}
+                              onChange={e => { const f = e.target.files?.[0]; if (f) handleUploadPhoto(s.id, f); e.target.value = ''; }}
+                            />
+                          </label>
+                        </div>
+                      </div>
+                      {(photos[s.id] || []).length === 0 ? (
+                        <p className={styles.empty}>No photos uploaded yet.</p>
+                      ) : (
+                        <div className={styles.photoGrid}>
+                          {(photos[s.id] || []).map(p => (
+                            <div key={p.id} className={styles.photoCard}>
+                              <img src={`/uploads/${p.image_path}`} alt={p.caption || ''} className={styles.photoThumb} />
+                              {p.caption && <div className={styles.photoCaption}>{p.caption}</div>}
+                              <button className={styles.photoDeleteBtn} onClick={() => handleDeletePhoto(s.id, p.id)}>✕</button>
+                            </div>
+                          ))}
+                        </div>
                       )}
                     </div>
                   )}

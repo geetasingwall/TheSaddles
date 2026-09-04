@@ -8,7 +8,7 @@ from app.models.models import (
     Configuration, Administrator, Coach, Batch,
     Facility, Horse, TeamMember, Testimonial, ClubLocation,
     TrialBooking, Registration, Student, FeePayment,
-    Attendance, StudentProgress,
+    Attendance, StudentProgress, StudentVideoLink, StudentPhoto,
 )
 
 
@@ -488,6 +488,62 @@ class TestimonialRepository:
         self.db.commit()
         self.db.refresh(t)
         return t
+
+
+# ─── Student Video Link ───────────────────────────────────────────────────
+
+class VideoLinkRepository:
+    def __init__(self, db: Session):
+        self.db = db
+
+    def get_by_student(self, student_id: UUID) -> list[StudentVideoLink]:
+        return self.db.query(StudentVideoLink).filter(
+            StudentVideoLink.student_id == student_id,
+            StudentVideoLink.is_active == True
+        ).order_by(StudentVideoLink.display_order).all()
+
+    def get_by_id(self, link_id: UUID) -> Optional[StudentVideoLink]:
+        return self.db.query(StudentVideoLink).filter(StudentVideoLink.id == link_id).first()
+
+    def create(self, data: dict) -> StudentVideoLink:
+        link = StudentVideoLink(**data)
+        self.db.add(link)
+        self.db.commit()
+        self.db.refresh(link)
+        return link
+
+    def delete(self, link: StudentVideoLink) -> None:
+        link.is_active = False
+        link.updated_at = datetime.utcnow()
+        self.db.commit()
+
+
+class StudentPhotoRepository:
+    def __init__(self, db: Session):
+        self.db = db
+
+    def get_all_active(self) -> list[StudentPhoto]:
+        return self.db.query(StudentPhoto).filter(StudentPhoto.is_active == True).order_by(StudentPhoto.created_at.desc()).all()
+
+    def get_by_student(self, student_id: UUID) -> list[StudentPhoto]:
+        return self.db.query(StudentPhoto).filter(
+            StudentPhoto.student_id == student_id, StudentPhoto.is_active == True
+        ).order_by(StudentPhoto.created_at.desc()).all()
+
+    def get_by_id(self, photo_id: UUID) -> Optional[StudentPhoto]:
+        return self.db.query(StudentPhoto).filter(StudentPhoto.id == photo_id).first()
+
+    def create(self, data: dict) -> StudentPhoto:
+        photo = StudentPhoto(**data)
+        self.db.add(photo)
+        self.db.commit()
+        self.db.refresh(photo)
+        return photo
+
+    def delete(self, photo: StudentPhoto) -> None:
+        photo.is_active = False
+        photo.updated_at = datetime.utcnow()
+        self.db.commit()
 
 
 # ─── Location ──────────────────────────────────────────────────────────────

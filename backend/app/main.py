@@ -9,7 +9,7 @@ from app.middleware.middleware import LoggingMiddleware, ExceptionMiddleware
 from app.api.routers import (
     auth_router, public_router, booking_router, reg_router,
     student_router, coach_router, attendance_router, admin_router,
-    horse_router, facility_router,
+    horse_router, facility_router, gallery_router,
 )
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
@@ -40,7 +40,7 @@ os.makedirs(uploads_path, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=uploads_path), name="uploads")
 
 # Register all routers
-for router in [auth_router, public_router, booking_router, reg_router, student_router, coach_router, attendance_router, admin_router, horse_router, facility_router]:
+for router in [auth_router, public_router, booking_router, reg_router, student_router, coach_router, attendance_router, admin_router, horse_router, facility_router, gallery_router]:
     app.include_router(router)
 
 

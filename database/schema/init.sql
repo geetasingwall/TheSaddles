@@ -409,6 +409,33 @@ CREATE INDEX IF NOT EXISTS idx_progress_student ON student_progress(student_id);
 CREATE INDEX IF NOT EXISTS idx_progress_coach ON student_progress(coach_id);
 CREATE INDEX IF NOT EXISTS idx_progress_date ON student_progress(assessment_date);
 
+-- 16. student_video_links
+CREATE TABLE IF NOT EXISTS student_video_links (
+    id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id      UUID NOT NULL,
+    title           VARCHAR(300) NOT NULL,
+    url             VARCHAR(1000) NOT NULL,
+    display_order   INTEGER NOT NULL DEFAULT 1,
+    is_active       BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at      TIMESTAMPTZ,
+    CONSTRAINT fk_video_student FOREIGN KEY(student_id) REFERENCES students(id)
+);
+CREATE INDEX IF NOT EXISTS idx_video_student ON student_video_links(student_id);
+
+-- 17. student_photos
+CREATE TABLE IF NOT EXISTS student_photos (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id  UUID NOT NULL,
+    image_path  VARCHAR(500) NOT NULL,
+    caption     VARCHAR(300),
+    is_active   BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMPTZ,
+    CONSTRAINT fk_photo_student FOREIGN KEY(student_id) REFERENCES students(id)
+);
+CREATE INDEX IF NOT EXISTS idx_photo_student ON student_photos(student_id);
+
 -- ============================================================
 -- SEED DATA
 -- ============================================================

@@ -27,6 +27,11 @@ export const publicApi = {
   getLocations: () => api.get<ApiResponse<ClubLocation[]>>('/public/locations').then(unwrap),
 };
 
+// ─── Gallery ──────────────────────────────────────────────────────────────
+export const galleryApi = {
+  getAll: () => api.get<ApiResponse>('/gallery').then(unwrap),
+};
+
 // ─── Trial Bookings ────────────────────────────────────────────────────────
 export const bookingApi = {
   getDates: () => api.get<ApiResponse>('/trial-bookings/dates').then(unwrap),
@@ -52,6 +57,7 @@ export const studentApi = {
   getAttendance: (student_id: string) => api.get<ApiResponse>(`/students/attendance?student_id=${student_id}`).then(unwrap),
   getFees: (student_id: string) => api.get<ApiResponse>(`/students/fees?student_id=${student_id}`).then(unwrap),
   getProgress: (student_id: string) => api.get<ApiResponse<ProgressRecord[]>>(`/students/progress?student_id=${student_id}`).then(unwrap),
+  getVideos: (student_id: string) => api.get<ApiResponse>(`/students/videos?student_id=${student_id}`).then(unwrap),
 };
 
 // ─── Coach ─────────────────────────────────────────────────────────────────
@@ -127,6 +133,17 @@ export const adminApi = {
   getStudentFees: (student_id: string) => api.get<ApiResponse>(`/admin/fees/${student_id}`).then(unwrap),
   getStudentProgress: (student_id: string) => api.get<ApiResponse>(`/admin/students/${student_id}/progress`).then(unwrap),
   updateStudentFee: (student_id: string, monthly_fee: number) => api.patch<ApiResponse>(`/admin/students/${student_id}/fee?monthly_fee=${monthly_fee}`).then(unwrap),
+  getStudentVideos: (student_id: string) => api.get<ApiResponse>(`/admin/students/${student_id}/videos`).then(unwrap),
+  addStudentVideo: (student_id: string, data: { title: string; url: string; display_order?: number }) => api.post<ApiResponse>(`/admin/students/${student_id}/videos`, data).then(unwrap),
+  deleteStudentVideo: (student_id: string, link_id: string) => api.delete<ApiResponse>(`/admin/students/${student_id}/videos/${link_id}`).then(unwrap),
+  getStudentPhotos: (student_id: string) => api.get<ApiResponse>(`/admin/students/${student_id}/photos`).then(unwrap),
+  uploadStudentPhoto: (student_id: string, file: File, caption?: string) => {
+    const form = new FormData();
+    form.append('file', file);
+    const url = `/admin/students/${student_id}/photos${caption ? `?caption=${encodeURIComponent(caption)}` : ''}`;
+    return api.post<ApiResponse>(url, form, { headers: { 'Content-Type': 'multipart/form-data' } }).then(unwrap);
+  },
+  deleteStudentPhoto: (student_id: string, photo_id: string) => api.delete<ApiResponse>(`/admin/students/${student_id}/photos/${photo_id}`).then(unwrap),
   assignStudentBatch: (student_id: string, batch_id: string) =>
     api.patch<ApiResponse>(`/admin/students/${student_id}/batch${batch_id ? `?batch_id=${batch_id}` : ''}`).then(unwrap),
   getAttendance: () => api.get<ApiResponse>('/admin/attendance').then(unwrap),

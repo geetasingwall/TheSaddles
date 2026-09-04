@@ -32,6 +32,7 @@ export function Navbar() {
           <Link to="/" onClick={() => setOpen(false)}>Home</Link>
           <Link to="/facilities" onClick={() => setOpen(false)}>Facilities</Link>
           <Link to="/horses" onClick={() => setOpen(false)}>Horses</Link>
+          <Link to="/gallery" onClick={() => setOpen(false)}>Gallery</Link>
           <Link to="/contact" onClick={() => setOpen(false)}>Contact</Link>
           <Link to="/trial-booking" onClick={() => setOpen(false)} className={styles.ctaLink}>Book Trial</Link>
 

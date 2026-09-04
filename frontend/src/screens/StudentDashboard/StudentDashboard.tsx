@@ -83,6 +83,7 @@ export function StudentDashboard() {
   const [attendance, setAttendance] = useState<Record<string, unknown> | null>(null);
   const [progress, setProgress] = useState<unknown[]>([]);
   const [feeData, setFeeData] = useState<any>(null);
+  const [videos, setVideos] = useState<{ id: string; title: string; url: string }[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -92,11 +93,13 @@ export function StudentDashboard() {
       studentApi.getAttendance(user.user_id),
       studentApi.getProgress(user.user_id),
       studentApi.getFees(user.user_id),
-    ]).then(([d, a, p, f]) => {
+      studentApi.getVideos(user.user_id),
+    ]).then(([d, a, p, f, v]) => {
       setDashboard(d.data as Record<string, unknown>);
       setAttendance(a.data as Record<string, unknown>);
       setProgress((p.data as unknown[]) || []);
       setFeeData(f.data as any);
+      setVideos((v.data as any[]) || []);
     }).finally(() => setLoading(false));
   }, [user]);
 
@@ -139,6 +142,21 @@ export function StudentDashboard() {
       <div className={styles.grid}>
         <Card title="Current Level">
           <div className={styles.level}>{String(prog?.current_level || 'Beginner')}</div>
+        </Card>
+
+        <Card title="🎬 My Videos">
+          {videos.length === 0 ? (
+            <p className={styles.empty}>No videos assigned yet.</p>
+          ) : (
+            <div className={styles.videoList}>
+              {videos.map(v => (
+                <a key={v.id} href={v.url} target="_blank" rel="noopener noreferrer" className={styles.videoLink}>
+                  <span className={styles.videoIcon}>▶</span>
+                  <span className={styles.videoTitle}>{v.title}</span>
+                </a>
+              ))}
+            </div>
+          )}
         </Card>
 
         <Card title="Attendance" className={styles.fullWidth}>

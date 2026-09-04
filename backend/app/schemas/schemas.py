@@ -614,3 +614,20 @@ class AdminDashboardOut(BaseModel):
     today_bookings: int
     total_horses: int
     active_coaches: int
+
+
+# ─── Student Video Link ────────────────────────────────────────────────────
+
+class VideoLinkCreate(BaseModel):
+    title: str
+    url: str
+    display_order: int = 1
+
+
+class VideoLinkOut(OrmBase):
+    id: UUID
+    student_id: UUID
+    title: str
+    url: str
+    display_order: int
+    is_active: bool
